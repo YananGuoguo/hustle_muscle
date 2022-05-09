@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hustle_muscle/home_page.dart';
+import 'package:hustle_muscle/video_info.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +26,9 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: const HomePage());
+        home: 
+        // const HomePage()
+        const VideoInfo()
+        );
   }
 }

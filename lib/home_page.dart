@@ -163,47 +163,90 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 Expanded(
-                    child: ListView.builder(
-                        itemCount: info.length,
-                        itemBuilder: (_, i) {
-                          return Row(
-                            children: [
-                              Container(
-                                  width: 200,
-                                  height: 170,
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                            info[i]['img']
-                                            )),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            blurRadius: 3,
-                                            offset: const Offset(5, 5),
-                                            color: color.AppColor.gradientSecond
-                                                .withOpacity(0.1)),
-                                        BoxShadow(
-                                            blurRadius: 3,
-                                            offset: const Offset(-5, -5),
-                                            color: color.AppColor.gradientSecond
-                                                .withOpacity(0.1))
-                                      ]),
-                                  child: Center(
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Text("glues",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: color
-                                                  .AppColor.homePageDetail)),
-                                    ),
-                                  )),
-                            ],
-                          );
-                        }))
+                    child: OverflowBox(
+                        child: ListView.builder(
+                            itemCount: (info.length) ~/ 2,
+                            itemBuilder: (_, i) {
+                              int a = 2 * i;
+                              int b = 2 * i + 1;
+                              return Row(
+                                children: [
+                                  Container(
+                                      width: 170,
+                                      height: 150,
+                                      margin: const EdgeInsets.only(bottom: 5),
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                              image:
+                                                  AssetImage(info[a]["img"])),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 3,
+                                                offset: const Offset(5, 5),
+                                                color: color
+                                                    .AppColor.gradientSecond
+                                                    .withOpacity(0.1)),
+                                            BoxShadow(
+                                                blurRadius: 3,
+                                                offset: const Offset(-5, -5),
+                                                color: color
+                                                    .AppColor.gradientSecond
+                                                    .withOpacity(0.1))
+                                          ]),
+                                      child: Center(
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(info[a]["title"],
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: color.AppColor
+                                                      .homePageDetail)),
+                                        ),
+                                      )),
+                                  Expanded(child: Container()),
+                                  Container(
+                                      width: 170,
+                                      height: 150,
+                                      margin: const EdgeInsets.only(bottom: 5),
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                              image:
+                                                  AssetImage(info[b]["img"])),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 3,
+                                                offset: const Offset(5, 5),
+                                                color: color
+                                                    .AppColor.gradientSecond
+                                                    .withOpacity(0.1)),
+                                            BoxShadow(
+                                                blurRadius: 3,
+                                                offset: const Offset(-5, -5),
+                                                color: color
+                                                    .AppColor.gradientSecond
+                                                    .withOpacity(0.1))
+                                          ]),
+                                      child: Center(
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(info[b]["title"],
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: color.AppColor
+                                                      .homePageDetail)),
+                                        ),
+                                      )),
+                                ],
+                              );
+                            })))
               ],
             )));
   }
