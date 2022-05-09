@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'colors.dart' as color;
@@ -10,6 +12,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List info = [];
+  _initData() {
+    DefaultAssetBundle.of(context).loadString("json/info.json").then((value) {
+      info = json.decode(value);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,14 +154,56 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text("Area of focus",
+                    Text("Workout Goals",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                             color: color.AppColor.homePageTitle))
                   ],
-                )
+                ),
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: info.length,
+                        itemBuilder: (_, i) {
+                          return Row(
+                            children: [
+                              Container(
+                                  width: 200,
+                                  height: 170,
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                            info[i]['img']
+                                            )),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 3,
+                                            offset: const Offset(5, 5),
+                                            color: color.AppColor.gradientSecond
+                                                .withOpacity(0.1)),
+                                        BoxShadow(
+                                            blurRadius: 3,
+                                            offset: const Offset(-5, -5),
+                                            color: color.AppColor.gradientSecond
+                                                .withOpacity(0.1))
+                                      ]),
+                                  child: Center(
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Text("glues",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: color
+                                                  .AppColor.homePageDetail)),
+                                    ),
+                                  )),
+                            ],
+                          );
+                        }))
               ],
             )));
   }
