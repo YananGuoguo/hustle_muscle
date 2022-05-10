@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import "colors.dart" as color;
 
 class VideoInfo extends StatefulWidget {
@@ -13,6 +14,7 @@ class VideoInfo extends StatefulWidget {
 
 class _VideoInfoState extends State<VideoInfo> {
   List info = [];
+
   _initData() {
     DefaultAssetBundle.of(context)
         .loadString("json/videoinfo.json")
@@ -51,9 +53,14 @@ class _VideoInfoState extends State<VideoInfo> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.arrow_back_ios_new_outlined,
-                                size: 16,
-                                color: color.AppColor.secondPageIconColor),
+                            InkWell(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Icon(Icons.arrow_back_ios_new_outlined,
+                                  size: 16,
+                                  color: color.AppColor.secondPageIconColor),
+                            ),
                             Expanded(child: Container()),
                             Icon(Icons.info_outlined,
                                 size: 16,

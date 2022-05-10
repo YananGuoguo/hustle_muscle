@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hustle_muscle/video_info.dart';
 import 'colors.dart' as color;
 
 class HomePage extends StatefulWidget {
@@ -13,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List info = [];
+
   _initData() {
     DefaultAssetBundle.of(context).loadString("json/info.json").then((value) {
       info = json.decode(value);
@@ -68,8 +71,13 @@ class _HomePageState extends State<HomePage> {
                             color: color.AppColor.homePageDetail,
                             fontWeight: FontWeight.w600)),
                     const SizedBox(width: 5),
-                    Icon(Icons.arrow_forward_ios_outlined,
-                        size: 16, color: color.AppColor.homePageIcons)
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => const VideoInfo());
+                      },
+                      child: Icon(Icons.arrow_forward_ios_outlined,
+                          size: 16, color: color.AppColor.homePageIcons),
+                    )
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -165,8 +173,9 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                     child: OverflowBox(
                         child: ListView.builder(
+                            shrinkWrap: true,
                             itemCount: (info.length) ~/ 2,
-                            itemBuilder: (_, i) {
+                            itemBuilder: (BuildContext context, i) {
                               int a = 2 * i;
                               int b = 2 * i + 1;
                               return Row(
