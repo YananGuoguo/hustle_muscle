@@ -19,7 +19,9 @@ class _VideoInfoState extends State<VideoInfo> {
     await DefaultAssetBundle.of(context)
         .loadString("json/videoinfo.json")
         .then((value) {
-      videoInfo = json.decode(value);
+      setState(() {
+        videoInfo = json.decode(value);
+      });
     });
   }
 
@@ -180,45 +182,144 @@ class _VideoInfoState extends State<VideoInfo> {
                                 const SizedBox(width: 30),
                               ],
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Expanded(
-                                child: ListView.builder(
-                                    itemCount: videoInfo.length,
-                                    itemBuilder: (context, int index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          debugPrint(index.toString());
-                                        },
-                                        child: Container(
-                                            height: 120,
-                                            color: Colors.redAccent,
-                                            width: 200,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                        width: 80,
-                                                        height: 80,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            image: DecorationImage(
-                                                                image: AssetImage(
-                                                                    videoInfo[
-                                                                            index]
-                                                                        [
-                                                                        "thumbnail"]))))
-                                                  ],
-                                                )
-                                              ],
-                                            )),
-                                      );
-                                    }))
+                                child: _listView())
                           ],
                         )))
               ],
             )));
+  }
+  _listView(){
+    return ListView.builder(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 30, vertical: 1),
+        itemCount: videoInfo.length,
+        itemBuilder: (context, int index) {
+          return GestureDetector(
+            onTap: () {
+              debugPrint(index.toString());
+            },
+            child: Container(
+                height: 120,
+                // width: 200,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                            width: 80,
+                            height: 80,
+                            decoration:
+                            BoxDecoration(
+                                borderRadius:
+                                BorderRadius
+                                    .circular(
+                                    10),
+                                image:
+                                DecorationImage(
+                                  image: AssetImage(
+                                      videoInfo[
+                                      index]
+                                      [
+                                      "thumbnail"]),
+                                  fit: BoxFit
+                                      .cover,
+                                ))),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment:
+                          MainAxisAlignment
+                              .center,
+                          crossAxisAlignment:
+                          CrossAxisAlignment
+                              .start,
+                          children: [
+                            Text(
+                              videoInfo[index]
+                              ["title"],
+                              style:
+                              const TextStyle(
+                                fontSize: 18,
+                                fontWeight:
+                                FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 7,
+                            ),
+                            Padding(
+                              padding:
+                              const EdgeInsets
+                                  .only(top: 3),
+                              child: Text(
+                                videoInfo[index]
+                                ["time"],
+                                style: TextStyle(
+                                    color: Colors
+                                        .grey[500]),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: const Color(
+                                0xFFeaeefc),
+                            borderRadius:
+                            BorderRadius
+                                .circular(10),
+                          ),
+                          child: const Center(
+                              child: Text(
+                                  "15s rest",
+                                  style: TextStyle(
+                                      color: Color(
+                                          0xFF839fed)))),
+                        ),
+                        Row(children: [
+                          for (int i = 0;
+                          i < 70;
+                          i++)
+                            i.isEven
+                                ? Container(
+                              width: 3.5,
+                              height: 1,
+                              decoration: BoxDecoration(
+                                  color: const Color(
+                                      0xFF839fed),
+                                  borderRadius:
+                                  BorderRadius.circular(
+                                      2)),
+                            )
+                                : Container(
+                              width: 3.5,
+                              height: 1,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                  BorderRadius.circular(
+                                      2)),
+                            )
+                        ])
+                      ],
+                    )
+                  ],
+                )),
+          );
+        });
   }
 }
