@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 import "colors.dart" as color;
 
 class VideoInfo extends StatefulWidget {
@@ -14,6 +15,8 @@ class VideoInfo extends StatefulWidget {
 
 class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
+  bool _playArea = false;
+  late VideoPlayerController _controller;
 
   _initData() async {
     await DefaultAssetBundle.of(context)
@@ -35,119 +38,160 @@ class _VideoInfoState extends State<VideoInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                  color.AppColor.gradientFirst,
-                  color.AppColor.gradientSecond,
-                ],
-                    begin: const FractionalOffset(0.0, 0.4),
-                    end: Alignment.topRight)),
+            decoration: _playArea == false
+                ? BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [
+                        color.AppColor.gradientFirst,
+                        color.AppColor.gradientSecond,
+                      ],
+                        begin: const FractionalOffset(0.0, 0.4),
+                        end: Alignment.topRight))
+                : BoxDecoration(
+                    color: color.AppColor.gradientSecond,
+                  ),
             child: Column(
               children: [
-                Container(
-                    padding:
-                        const EdgeInsets.only(top: 40, right: 30, left: 30),
-                    width: MediaQuery.of(context).size.width,
-                    height: 210,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                _playArea == false
+                    ? Container(
+                        padding:
+                            const EdgeInsets.only(top: 40, right: 30, left: 30),
+                        width: MediaQuery.of(context).size.width,
+                        height: 220,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: Icon(Icons.arrow_back_ios_new_outlined,
-                                  size: 16,
-                                  color: color.AppColor.secondPageIconColor),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  child: Icon(Icons.arrow_back_ios_new_outlined,
+                                      size: 16,
+                                      color:
+                                          color.AppColor.secondPageIconColor),
+                                ),
+                                Expanded(child: Container()),
+                                Icon(Icons.info_outlined,
+                                    size: 16,
+                                    color: color.AppColor.secondPageIconColor),
+                              ],
                             ),
-                            Expanded(child: Container()),
-                            Icon(Icons.info_outlined,
-                                size: 16,
-                                color: color.AppColor.secondPageIconColor),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Text("Legs Toning",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: color.AppColor.secondPageTitleColor,
-                            )),
-                        const SizedBox(height: 5),
-                        Text("Glutes Workout",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: color.AppColor.secondPageTitleColor,
-                            )),
-                        const SizedBox(height: 30),
-                        Row(
-                          children: [
-                            Container(
-                              width: 90,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        color.AppColor
-                                            .secondPageContainerGradient1stColor,
-                                        color.AppColor
-                                            .secondPageContainerGradient2ndColor,
-                                      ],
-                                      begin: Alignment.bottomLeft,
-                                      end: Alignment.topRight)),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.timer_sharp,
-                                        size: 18,
-                                        color:
-                                            color.AppColor.secondPageIconColor),
-                                    const SizedBox(width: 5),
-                                    Text("68 min",
-                                        style: TextStyle(
-                                            fontSize: 16,
+                            const SizedBox(height: 15),
+                            Text("Legs Toning",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: color.AppColor.secondPageTitleColor,
+                                )),
+                            const SizedBox(height: 5),
+                            Text("Glutes Workout",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: color.AppColor.secondPageTitleColor,
+                                )),
+                            const SizedBox(height: 30),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 90,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(
+                                          colors: [
+                                            color.AppColor
+                                                .secondPageContainerGradient1stColor,
+                                            color.AppColor
+                                                .secondPageContainerGradient2ndColor,
+                                          ],
+                                          begin: Alignment.bottomLeft,
+                                          end: Alignment.topRight)),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.timer_sharp,
+                                            size: 18,
                                             color: color
-                                                .AppColor.secondPageIconColor))
-                                  ]),
+                                                .AppColor.secondPageIconColor),
+                                        const SizedBox(width: 5),
+                                        Text("68 min",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: color.AppColor
+                                                    .secondPageIconColor))
+                                      ]),
+                                ),
+                                Expanded(child: Container()),
+                                Container(
+                                  width: 250,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(
+                                          colors: [
+                                            color.AppColor
+                                                .secondPageContainerGradient1stColor,
+                                            color.AppColor
+                                                .secondPageContainerGradient2ndColor,
+                                          ],
+                                          begin: Alignment.bottomLeft,
+                                          end: Alignment.topRight)),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.fitness_center_outlined,
+                                            size: 18,
+                                            color: color
+                                                .AppColor.secondPageIconColor),
+                                        const SizedBox(width: 5),
+                                        Text("Resistent band, kettebell",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: color.AppColor
+                                                    .secondPageIconColor))
+                                      ]),
+                                )
+                              ],
                             ),
-                            Expanded(child: Container()),
-                            Container(
-                              width: 250,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        color.AppColor
-                                            .secondPageContainerGradient1stColor,
-                                        color.AppColor
-                                            .secondPageContainerGradient2ndColor,
-                                      ],
-                                      begin: Alignment.bottomLeft,
-                                      end: Alignment.topRight)),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.fitness_center_outlined,
-                                        size: 18,
-                                        color:
-                                            color.AppColor.secondPageIconColor),
-                                    const SizedBox(width: 5),
-                                    Text("Resistent band, kettebell",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: color
-                                                .AppColor.secondPageIconColor))
-                                  ]),
-                            )
+                            const SizedBox(width: 20)
                           ],
+                        ))
+                    : Column(children: [
+                        Container(
+                          height: 100,
+                          padding: const EdgeInsets.only(
+                              top: 50, left: 30, right: 30),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  debugPrint("tapped");
+                                  setState(() {
+                                    _playArea = false;
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.arrow_back_ios_new_outlined,
+                                  size: 20,
+                                  color: color.AppColor.secondPageIconColor,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              Icon(
+                                Icons.info_outline,
+                                size: 20,
+                                color: color.AppColor.secondPageTopIconColor,
+                              )
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 20)
-                      ],
-                    )),
+                        _playView(context),
+                      ]),
                 Expanded(
                     child: Container(
                         decoration: const BoxDecoration(
@@ -185,26 +229,53 @@ class _VideoInfoState extends State<VideoInfo> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Expanded(
-                                child: _listView())
+                            Expanded(child: _listView())
                           ],
                         )))
               ],
             )));
   }
-  _listView(){
+
+  Widget _playView(BuildContext context) {
+    final controller = _controller;
+    if (controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: 16 / 9,
+        child: VideoPlayer(controller),
+      );
+    } else {
+      return const Text("Being initialized please wait!");
+    }
+  }
+
+  _onTapVideo(int index) {
+    final controller =
+        VideoPlayerController.network(videoInfo[index]["videoUrl"]);
+    _controller = controller;
+    setState(() {});
+    controller.initialize().then((_) {
+      controller.play();
+      setState(() {});
+    });
+  }
+
+  _listView() {
     return ListView.builder(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 30, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
         itemCount: videoInfo.length,
         itemBuilder: (context, int index) {
           return GestureDetector(
             onTap: () {
+              _onTapVideo(index);
               debugPrint(index.toString());
+              setState(() {
+                if (_playArea == false) {
+                  _playArea = true;
+                }
+              });
             },
-            child: Container(
+            child: SizedBox(
                 height: 120,
-                // width: 200,
                 child: Column(
                   children: [
                     Row(
@@ -212,56 +283,35 @@ class _VideoInfoState extends State<VideoInfo> {
                         Container(
                             width: 80,
                             height: 80,
-                            decoration:
-                            BoxDecoration(
-                                borderRadius:
-                                BorderRadius
-                                    .circular(
-                                    10),
-                                image:
-                                DecorationImage(
-                                  image: AssetImage(
-                                      videoInfo[
-                                      index]
-                                      [
-                                      "thumbnail"]),
-                                  fit: BoxFit
-                                      .cover,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image:
+                                      AssetImage(videoInfo[index]["thumbnail"]),
+                                  fit: BoxFit.cover,
                                 ))),
                         const SizedBox(
                           width: 10,
                         ),
                         Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              videoInfo[index]
-                              ["title"],
-                              style:
-                              const TextStyle(
+                              videoInfo[index]["title"],
+                              style: const TextStyle(
                                 fontSize: 18,
-                                fontWeight:
-                                FontWeight.bold,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(
                               height: 7,
                             ),
                             Padding(
-                              padding:
-                              const EdgeInsets
-                                  .only(top: 3),
+                              padding: const EdgeInsets.only(top: 3),
                               child: Text(
-                                videoInfo[index]
-                                ["time"],
-                                style: TextStyle(
-                                    color: Colors
-                                        .grey[500]),
+                                videoInfo[index]["time"],
+                                style: TextStyle(color: Colors.grey[500]),
                               ),
                             )
                           ],
@@ -277,43 +327,30 @@ class _VideoInfoState extends State<VideoInfo> {
                           width: 80,
                           height: 20,
                           decoration: BoxDecoration(
-                            color: const Color(
-                                0xFFeaeefc),
-                            borderRadius:
-                            BorderRadius
-                                .circular(10),
+                            color: const Color(0xFFeaeefc),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Center(
-                              child: Text(
-                                  "15s rest",
-                                  style: TextStyle(
-                                      color: Color(
-                                          0xFF839fed)))),
+                              child: Text("15s rest",
+                                  style: TextStyle(color: Color(0xFF839fed)))),
                         ),
                         Row(children: [
-                          for (int i = 0;
-                          i < 70;
-                          i++)
+                          for (int i = 0; i < 70; i++)
                             i.isEven
                                 ? Container(
-                              width: 3.5,
-                              height: 1,
-                              decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFF839fed),
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      2)),
-                            )
+                                    width: 3.5,
+                                    height: 1,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFF839fed),
+                                        borderRadius: BorderRadius.circular(2)),
+                                  )
                                 : Container(
-                              width: 3.5,
-                              height: 1,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      2)),
-                            )
+                                    width: 3.5,
+                                    height: 1,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(2)),
+                                  )
                         ])
                       ],
                     )
