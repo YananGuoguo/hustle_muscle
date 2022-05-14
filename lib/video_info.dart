@@ -235,7 +235,6 @@ class _VideoInfoState extends State<VideoInfo> {
               ],
             )));
   }
-
   Widget _playView(BuildContext context) {
     final controller = _controller;
     if (controller.value.isInitialized) {
@@ -244,7 +243,14 @@ class _VideoInfoState extends State<VideoInfo> {
         child: VideoPlayer(controller),
       );
     } else {
-      return const Text("Being initialized please wait!");
+      return const AspectRatio(aspectRatio: 16/9,
+      child: Center(
+        child:  Text("Loading...",
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.white60
+        ),)
+      ));
     }
   }
 
