@@ -20,6 +20,11 @@ class _VideoInfoState extends State<VideoInfo> {
 
   // late VideoPlayerController _controller;
   late YoutubePlayerController _controller;
+  late TextEditingController _idController;
+  late TextEditingController _seekToController;
+
+  late PlayerState _playerState;
+  late YoutubeMetaData _videoMetaData;
 
   _initData() async {
     await DefaultAssetBundle.of(context)
@@ -38,13 +43,13 @@ class _VideoInfoState extends State<VideoInfo> {
   }
 
   @override
-  void deactivate(){
+  void deactivate() {
     _controller.pause();
     super.deactivate();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
@@ -252,41 +257,31 @@ class _VideoInfoState extends State<VideoInfo> {
   }
 
   Widget _playView(BuildContext context) {
-    // final controller = _controller;
-    // if (controller != null) {
-      return AspectRatio(
-        aspectRatio: 16 / 9,
-        child: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controller: _controller,
-          ), builder: (BuildContext , Widget ) {  },
+    final controller = _controller;
+    return YoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: controller,
         ),
-      );
-    // } else {
-    //   return const AspectRatio(
-    //       aspectRatio: 16 / 9,
-    //       child: Center(
-    //           child: Text(
-    //         "Loading...",
-    //         style: TextStyle(fontSize: 20, color: Colors.white60),
-    //       )));
-    // }
+        builder: (context, player) {
+          return AspectRatio(aspectRatio: 16 / 9, child: player);
+        });
   }
 
+  //4:30 runYoutubePlayer
   _onTapVideo(int index) {
     String youtubeUrl = videoInfo[index]["videoUrl"];
-    String? initId = YoutubePlayer.convertUrlToId(youtubeUrl);
-      YoutubePlayerController controller = YoutubePlayerController(
-        initialVideoId: initId!,
-        flags: const YoutubePlayerFlags(
-          autoPlay: true,
-          mute: true,
-          enableCaption: true,
-          isLive: false,
-        ),
-      );
-      _controller = controller;
-      setState(() {});
+    String? youtubeId = YoutubePlayer.convertUrlToId(youtubeUrl);
+    final controller = YoutubePlayerController(
+      initialVideoId: youtubeId!,
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: true,
+        enableCaption: true,
+        isLive: false,
+      ),
+    );
+    _controller = controller;
+    setState(() {});
   }
 
   _listView() {
