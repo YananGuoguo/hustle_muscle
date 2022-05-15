@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import "colors.dart" as color;
 
 class VideoInfo extends StatefulWidget {
@@ -16,7 +17,9 @@ class VideoInfo extends StatefulWidget {
 class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
   bool _playArea = false;
-  late VideoPlayerController _controller;
+
+  // late VideoPlayerController _controller;
+  late YoutubePlayerController _controller;
 
   _initData() async {
     await DefaultAssetBundle.of(context)
@@ -32,6 +35,18 @@ class _VideoInfoState extends State<VideoInfo> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void deactivate(){
+    _controller.pause();
+    super.deactivate();
+  }
+
+  @override
+  void dispose(){
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -235,34 +250,43 @@ class _VideoInfoState extends State<VideoInfo> {
               ],
             )));
   }
+
   Widget _playView(BuildContext context) {
-    final controller = _controller;
-    if (controller.value.isInitialized) {
+    // final controller = _controller;
+    // if (controller != null) {
       return AspectRatio(
         aspectRatio: 16 / 9,
-        child: VideoPlayer(controller),
+        child: YoutubePlayerBuilder(
+          player: YoutubePlayer(
+            controller: _controller,
+          ), builder: (BuildContext , Widget ) {  },
+        ),
       );
-    } else {
-      return const AspectRatio(aspectRatio: 16/9,
-      child: Center(
-        child:  Text("Loading...",
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white60
-        ),)
-      ));
-    }
+    // } else {
+    //   return const AspectRatio(
+    //       aspectRatio: 16 / 9,
+    //       child: Center(
+    //           child: Text(
+    //         "Loading...",
+    //         style: TextStyle(fontSize: 20, color: Colors.white60),
+    //       )));
+    // }
   }
 
   _onTapVideo(int index) {
-    final controller =
-        VideoPlayerController.network(videoInfo[index]["videoUrl"]);
-    _controller = controller;
-    setState(() {});
-    controller.initialize().then((_) {
-      controller.play();
+    String youtubeUrl = videoInfo[index]["videoUrl"];
+    String? initId = YoutubePlayer.convertUrlToId(youtubeUrl);
+      YoutubePlayerController controller = YoutubePlayerController(
+        initialVideoId: initId!,
+        flags: const YoutubePlayerFlags(
+          autoPlay: true,
+          mute: true,
+          enableCaption: true,
+          isLive: false,
+        ),
+      );
+      _controller = controller;
       setState(() {});
-    });
   }
 
   _listView() {
