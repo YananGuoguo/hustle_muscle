@@ -275,7 +275,7 @@ class _VideoInfoState extends State<VideoInfo> {
       initialVideoId: youtubeId!,
       flags: const YoutubePlayerFlags(
         autoPlay: true,
-        mute: true,
+        mute: false,
         enableCaption: true,
         isLive: false,
       ),
