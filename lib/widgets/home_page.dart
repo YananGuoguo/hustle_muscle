@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hustle_muscle/video_info.dart';
+import 'package:hustle_muscle/widgets/video_info.dart';
 import 'colors.dart' as color;
 
 class HomePage extends StatefulWidget {

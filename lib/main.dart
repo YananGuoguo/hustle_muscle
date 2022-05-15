@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hustle_muscle/home_page.dart';
+import 'package:hustle_muscle/widgets/home_page.dart';
 import 'package:get/get.dart';
-import 'package:hustle_muscle/video_info.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +20,6 @@ class MyApp extends StatelessWidget {
         ),
         home:
             const HomePage()
-            // const VideoInfo()
     );
   }
 }

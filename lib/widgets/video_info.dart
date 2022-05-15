@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import "colors.dart" as color;
+import 'colors.dart' as color;
 
 class VideoInfo extends StatefulWidget {
   const VideoInfo({Key? key}) : super(key: key);
@@ -18,7 +17,6 @@ class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
   bool _playArea = false;
 
-  // late VideoPlayerController _controller;
   late YoutubePlayerController _controller;
   late TextEditingController _idController;
   late TextEditingController _seekToController;
@@ -93,9 +91,23 @@ class _VideoInfoState extends State<VideoInfo> {
                                           color.AppColor.secondPageIconColor),
                                 ),
                                 Expanded(child: Container()),
-                                Icon(Icons.info_outlined,
-                                    size: 16,
-                                    color: color.AppColor.secondPageIconColor),
+                                InkWell(
+                                  onTap: () {
+                                    debugPrint("add pressed");
+                                  },
+                                  child:  Row(
+                                    children: [
+                                      Icon(Icons.add_outlined,
+                                          size: 16,
+                                          color: color.AppColor.secondPageIconColor),
+                                      Text("Add New Exercise",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: color.AppColor.secondPageIconColor,)
+                                      )],
+                                  ),
+                                ),
+
                               ],
                             ),
                             const SizedBox(height: 15),
@@ -258,13 +270,13 @@ class _VideoInfoState extends State<VideoInfo> {
 
   Widget _playView(BuildContext context) {
     final controller = _controller;
-    return YoutubePlayerBuilder(
-        player: YoutubePlayer(
-          controller: controller,
-        ),
-        builder: (context, player) {
-          return AspectRatio(aspectRatio: 16 / 9, child: player);
-        });
+      return YoutubePlayerBuilder(
+          player: YoutubePlayer(
+            controller: controller,
+          ),
+          builder: (context, player) {
+            return AspectRatio(aspectRatio: 16 / 9, child: player);
+          });
   }
 
   //4:30 runYoutubePlayer
