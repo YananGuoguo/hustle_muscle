@@ -36,6 +36,10 @@ dependencies:
   get:
   video_player:
   youtube_player_flutter: ^8.0.0
+  string_validator: ^0.1.4
+  sqflite: any
+  path:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
