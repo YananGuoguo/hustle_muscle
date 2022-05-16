@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hustle_muscle/widgets/operations_exercise.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'colors.dart' as color;
 
@@ -94,20 +95,23 @@ class _VideoInfoState extends State<VideoInfo> {
                                 InkWell(
                                   onTap: () {
                                     debugPrint("add pressed");
+                                    Get.to(() => const OperationsExercise());
                                   },
-                                  child:  Row(
+                                  child: Row(
                                     children: [
                                       Icon(Icons.add_outlined,
                                           size: 16,
-                                          color: color.AppColor.secondPageIconColor),
+                                          color: color
+                                              .AppColor.secondPageIconColor),
                                       Text("Add New Exercise",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: color.AppColor.secondPageIconColor,)
-                                      )],
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: color
+                                                .AppColor.secondPageIconColor,
+                                          ))
+                                    ],
                                   ),
                                 ),
-
                               ],
                             ),
                             const SizedBox(height: 15),
@@ -270,13 +274,13 @@ class _VideoInfoState extends State<VideoInfo> {
 
   Widget _playView(BuildContext context) {
     final controller = _controller;
-      return YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controller: controller,
-          ),
-          builder: (context, player) {
-            return AspectRatio(aspectRatio: 16 / 9, child: player);
-          });
+    return YoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: controller,
+        ),
+        builder: (context, player) {
+          return AspectRatio(aspectRatio: 16 / 9, child: player);
+        });
   }
 
   //4:30 runYoutubePlayer
