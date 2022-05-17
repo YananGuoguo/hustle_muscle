@@ -15,11 +15,13 @@ class ExerciseController extends GetxController {
     return await DBHelper.insert(exercise);
   }
 
-
-
   void getExercises() async {
     List<Map<String, dynamic>> exercises = await DBHelper.query();
     exerciseList.assignAll(exercises.map((data)=> new Exercise.fromJson(data)).toList());
+  }
+
+  void delete(Exercise exercise){
+    var val = DBHelper.delete(exercise);
   }
 
 }
