@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hustle_muscle/utilitaires/db_helper.dart';
 import 'package:hustle_muscle/widgets/home_page.dart';
 import 'package:get/get.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DBHelper.initDb();
   runApp(const MyApp());
 }
 
@@ -18,8 +21,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:
-            const HomePage()
-    );
+        home: const HomePage());
   }
 }
