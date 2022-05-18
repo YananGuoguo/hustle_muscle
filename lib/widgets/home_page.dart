@@ -192,77 +192,85 @@ class _HomePageState extends State<HomePage> {
           shrinkWrap: true,
           itemCount: (_categoryController.categoryList.length) ~/2,
           itemBuilder: (BuildContext context, i) {
-            print("..................................................");
-            print((_categoryController.categoryList.length) ~/2);
             int a = 2 * i;
             int b = 2 * i + 1;
             return Row(
               children: [
-                Container(
-                    width: 170,
-                    height: 150,
-                    margin: const EdgeInsets.only(bottom: 5),
-                    padding: const EdgeInsets.only(bottom: 5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                            image: AssetImage(_categoryController.categoryList[a].thumbnail.toString())),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 3,
-                              offset: const Offset(5, 5),
-                              color: color.AppColor.gradientSecond
-                                  .withOpacity(0.1)),
-                          BoxShadow(
-                              blurRadius: 3,
-                              offset: const Offset(-5, -5),
-                              color: color.AppColor.gradientSecond
-                                  .withOpacity(0.1))
-                        ]),
-                    child: Center(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Text(_categoryController.categoryList[a].category.toString(),
-                            style: TextStyle(
-                                fontSize: 15,
-                                color:
-                                color.AppColor.homePageDetail)),
-                      ),
-                    )),
+                InkWell(
+                  onTap: () {
+                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[a].category.toString());
+                  },
+                  child: Container(
+                      width: 170,
+                      height: 150,
+                      margin: const EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                              image: AssetImage(_categoryController.categoryList[a].thumbnail.toString())),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(5, 5),
+                                color: color.AppColor.gradientSecond
+                                    .withOpacity(0.1)),
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(-5, -5),
+                                color: color.AppColor.gradientSecond
+                                    .withOpacity(0.1))
+                          ]),
+                      child: Center(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(_categoryController.categoryList[a].category.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color:
+                                  color.AppColor.homePageDetail)),
+                        ),
+                      )),
+                ),
                 Expanded(child: Container()),
-                Container(
-                    width: 170,
-                    height: 150,
-                    margin: const EdgeInsets.only(bottom: 5),
-                    padding: const EdgeInsets.only(bottom: 5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                            image: AssetImage(_categoryController.categoryList[b].thumbnail.toString())),
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 3,
-                              offset: const Offset(5, 5),
-                              color: color.AppColor.gradientSecond
-                                  .withOpacity(0.1)),
-                          BoxShadow(
-                              blurRadius: 3,
-                              offset: const Offset(-5, -5),
-                              color: color.AppColor.gradientSecond
-                                  .withOpacity(0.1))
-                        ]),
-                    child: Center(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Text(_categoryController.categoryList[b].category.toString(),
-                            style: TextStyle(
-                                fontSize: 15,
-                                color:
-                                color.AppColor.homePageDetail)),
-                      ),
-                    )),
+                InkWell(
+                  onTap: () {
+                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[b].category.toString());
+                  },
+                  child: Container(
+                      width: 170,
+                      height: 150,
+                      margin: const EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                              image: AssetImage(_categoryController.categoryList[b].thumbnail.toString())),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(5, 5),
+                                color: color.AppColor.gradientSecond
+                                    .withOpacity(0.1)),
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(-5, -5),
+                                color: color.AppColor.gradientSecond
+                                    .withOpacity(0.1))
+                          ]),
+                      child: Center(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(_categoryController.categoryList[b].category.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color:
+                                  color.AppColor.homePageDetail)),
+                        ),
+                      )),
+                ),
               ],
             );
           });

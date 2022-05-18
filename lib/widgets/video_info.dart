@@ -19,6 +19,7 @@ class VideoInfo extends StatefulWidget {
 class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
   bool _playArea = false;
+  String categoryShow = Get.arguments;
 
   final _categoryController = Get.put(CategoryController());
   final _exerciseController = Get.put(ExerciseController());
@@ -40,6 +41,7 @@ class _VideoInfoState extends State<VideoInfo> {
     });
     _exerciseController.getExercises();
     _categoryController.getCategories();
+    print("........$categoryShow.........");
   }
 
   @override
