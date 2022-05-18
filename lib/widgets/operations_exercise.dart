@@ -108,6 +108,7 @@ class _OperationsExerciseState extends State<OperationsExercise> {
   }
 
   _addExerciseToDb() async {
+    int long = _exerciseController.exerciseList.length;
     int value = await _exerciseController.addExercise(
         exercise: Exercise(
       title: _titleController.text,
@@ -115,7 +116,7 @@ class _OperationsExerciseState extends State<OperationsExercise> {
       time: int.parse(_timeController.text),
       repeat: int.parse(_repeatController.text),
     ));
-
     print("My id is " "$value");
+    print("length:""$long");
   }
 }

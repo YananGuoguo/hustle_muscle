@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hustle_muscle/widgets/operations_exercise.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../controllers/category_controller.dart';
+import '../controllers/exercise_controller.dart';
 import 'colors.dart' as color;
 
 class VideoInfo extends StatefulWidget {
@@ -17,6 +19,9 @@ class VideoInfo extends StatefulWidget {
 class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
   bool _playArea = false;
+
+  final _categoryController = Get.put(CategoryController());
+  final _exerciseController = Get.put(ExerciseController());
 
   late YoutubePlayerController _controller;
   late TextEditingController _idController;
@@ -33,6 +38,11 @@ class _VideoInfoState extends State<VideoInfo> {
         videoInfo = json.decode(value);
       });
     });
+
+    _exerciseController.getExercises();
+    _categoryController.getCategories();
+    print("first test");
+    print(_exerciseController.exerciseList.length);
   }
 
   @override
@@ -55,6 +65,10 @@ class _VideoInfoState extends State<VideoInfo> {
 
   @override
   Widget build(BuildContext context) {
+    print("000000000000000000000000000000");
+
+    print(_exerciseController.exerciseList.length);
+    print("000000000000000000000000000000");
     return Scaffold(
         body: Container(
             decoration: _playArea == false
@@ -93,9 +107,10 @@ class _VideoInfoState extends State<VideoInfo> {
                                 ),
                                 Expanded(child: Container()),
                                 InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     debugPrint("add pressed");
-                                    Get.to(() => const OperationsExercise());
+                                    await Get.to(() => const OperationsExercise());
+                                    // _exerciseController.getExercises();
                                   },
                                   child: Row(
                                     children: [

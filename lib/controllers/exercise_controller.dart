@@ -22,6 +22,7 @@ class ExerciseController extends GetxController {
 
   void delete(Exercise exercise){
     var val = DBHelper.delete(exercise);
+    print (val);
   }
 
 }

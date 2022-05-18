@@ -6,15 +6,16 @@ import '../models/class_exercise.dart';
 
 class DBHelper {
   static Database? _db;
-  static final int _version = 3;
-  static final String _tableName = "exercises";
+  static const int _version = 3;
+  static const String _tableName = "exercises";
+  static const String _categoryTable="category";
 
   static Future<void> _createDb(Database db) async {
     await db.execute("CREATE TABLE $_tableName("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "title STRING, img STRING, time INT,"
         "repeat INT, category INT, description STRING)");
-    await db.execute("CREATE TABLE category("
+    await db.execute("CREATE TABLE $_categoryTable("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "category STRING, thumbnail STRING)");
   }
@@ -37,13 +38,18 @@ class DBHelper {
   }
 
   static Future<int> insert(Exercise? exercise) async {
-    print("insert");
+    print("insert!!!");
     return await _db?.insert(_tableName, exercise!.toJson()) ?? 1;
   }
 
   static Future<List<Map<String, dynamic>>> query() async {
     print("query function called");
     return await _db!.query(_tableName);
+  }
+
+  static Future<List<Map<String, dynamic>>> queryCategory() async {
+    print("query category called");
+    return await _db!.query(_categoryTable);
   }
 
   static delete(Exercise exercise) async {

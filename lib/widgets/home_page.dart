@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hustle_muscle/controllers/category_controller.dart';
+import 'package:hustle_muscle/controllers/exercise_controller.dart';
 import 'package:hustle_muscle/widgets/video_info.dart';
 import 'colors.dart' as color;
 
@@ -14,18 +16,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List info = [];
+  // List info = [];
+  final _categoryController = Get.put(CategoryController());
+  final _exerciseController = Get.put(ExerciseController());
 
   _initData() {
-    DefaultAssetBundle.of(context).loadString("json/info.json").then((value) {
-      info = json.decode(value);
-    });
+    // DefaultAssetBundle.of(context).loadString("json/info.json").then((value) {
+    //   info = json.decode(value);
+    // });
+    _exerciseController.getExercises();
+    _categoryController.getCategories();
+    print("first test");
+    print(_exerciseController.exerciseList.length);
   }
 
   @override
   void initState() {
     super.initState();
     _initData();
+    print("second test");
+    print(_exerciseController.exerciseList.length);
   }
 
   @override
@@ -171,93 +181,96 @@ class _HomePageState extends State<HomePage> {
                             color: color.AppColor.homePageTitle))
                   ],
                 ),
-                Expanded(
-                    child: OverflowBox(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: (info.length) ~/ 2,
-                            itemBuilder: (BuildContext context, i) {
-                              int a = 2 * i;
-                              int b = 2 * i + 1;
-                              return Row(
-                                children: [
-                                  Container(
-                                      width: 170,
-                                      height: 150,
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          image: DecorationImage(
-                                              image:
-                                                  AssetImage(info[a]["img"])),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                blurRadius: 3,
-                                                offset: const Offset(5, 5),
-                                                color: color
-                                                    .AppColor.gradientSecond
-                                                    .withOpacity(0.1)),
-                                            BoxShadow(
-                                                blurRadius: 3,
-                                                offset: const Offset(-5, -5),
-                                                color: color
-                                                    .AppColor.gradientSecond
-                                                    .withOpacity(0.1))
-                                          ]),
-                                      child: Center(
-                                        child: Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text(info[a]["title"],
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: color.AppColor
-                                                      .homePageDetail)),
-                                        ),
-                                      )),
-                                  Expanded(child: Container()),
-                                  Container(
-                                      width: 170,
-                                      height: 150,
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          image: DecorationImage(
-                                              image:
-                                                  AssetImage(info[b]["img"])),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                blurRadius: 3,
-                                                offset: const Offset(5, 5),
-                                                color: color
-                                                    .AppColor.gradientSecond
-                                                    .withOpacity(0.1)),
-                                            BoxShadow(
-                                                blurRadius: 3,
-                                                offset: const Offset(-5, -5),
-                                                color: color
-                                                    .AppColor.gradientSecond
-                                                    .withOpacity(0.1))
-                                          ]),
-                                      child: Center(
-                                        child: Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text(info[b]["title"],
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: color.AppColor
-                                                      .homePageDetail)),
-                                        ),
-                                      )),
-                                ],
-                              );
-                            })))
+                _showCategories(),
               ],
             )));
+  }
+
+  _showCategories(){
+    return Expanded(child: OverflowBox(child: Obx(() {
+      print("categoryController:" "$_categoryController");
+      print(_categoryController.categoryList.length);
+      print(_exerciseController.exerciseList.length);
+      print("..........................................");
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: (_categoryController.categoryList.length) ~/2,
+          itemBuilder: (BuildContext context, i) {
+            print("categoryController:" "$_categoryController");
+            print(_categoryController.categoryList.length);
+            print(_exerciseController.exerciseList.length);
+            int a = 2 * i;
+            int b = 2 * i + 1;
+            return Row(
+              children: [
+                Container(
+                    width: 170,
+                    height: 150,
+                    margin: const EdgeInsets.only(bottom: 5),
+                    padding: const EdgeInsets.only(bottom: 5),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        image: DecorationImage(
+                            image: AssetImage(_categoryController.categoryList[a].thumbnail.toString())),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 3,
+                              offset: const Offset(5, 5),
+                              color: color.AppColor.gradientSecond
+                                  .withOpacity(0.1)),
+                          BoxShadow(
+                              blurRadius: 3,
+                              offset: const Offset(-5, -5),
+                              color: color.AppColor.gradientSecond
+                                  .withOpacity(0.1))
+                        ]),
+                    child: Center(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(_categoryController.categoryList[a].category.toString(),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color:
+                                color.AppColor.homePageDetail)),
+                      ),
+                    )),
+                Expanded(child: Container()),
+                Container(
+                    width: 170,
+                    height: 150,
+                    margin: const EdgeInsets.only(bottom: 5),
+                    padding: const EdgeInsets.only(bottom: 5),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        image: DecorationImage(
+                            image: AssetImage(_categoryController.categoryList[b].thumbnail.toString())),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 3,
+                              offset: const Offset(5, 5),
+                              color: color.AppColor.gradientSecond
+                                  .withOpacity(0.1)),
+                          BoxShadow(
+                              blurRadius: 3,
+                              offset: const Offset(-5, -5),
+                              color: color.AppColor.gradientSecond
+                                  .withOpacity(0.1))
+                        ]),
+                    child: Center(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(_categoryController.categoryList[b].category.toString(),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color:
+                                color.AppColor.homePageDetail)),
+                      ),
+                    )),
+              ],
+            );
+          });
+    })));
   }
 }
