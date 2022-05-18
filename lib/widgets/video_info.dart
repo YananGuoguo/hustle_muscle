@@ -23,7 +23,7 @@ class _VideoInfoState extends State<VideoInfo> {
   final _categoryController = Get.put(CategoryController());
   final _exerciseController = Get.put(ExerciseController());
 
-  late YoutubePlayerController _controller;
+  YoutubePlayerController? _controller;
   // late TextEditingController _idController;
   // late TextEditingController _seekToController;
   //
@@ -50,13 +50,13 @@ class _VideoInfoState extends State<VideoInfo> {
 
   @override
   void deactivate() {
-    _controller.pause();
+    _controller?.pause();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -282,13 +282,16 @@ class _VideoInfoState extends State<VideoInfo> {
 
   Widget _playView(BuildContext context) {
     final controller = _controller;
-    return YoutubePlayerBuilder(
+    if(controller!=null){return YoutubePlayerBuilder(
         player: YoutubePlayer(
           controller: controller,
         ),
         builder: (context, player) {
           return AspectRatio(aspectRatio: 16 / 9, child: player);
         });
+    }else{
+      return const Text("Being initialized please wait!");
+    }
   }
 
   //4:30 runYoutubePlayer
