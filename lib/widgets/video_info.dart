@@ -24,11 +24,11 @@ class _VideoInfoState extends State<VideoInfo> {
   final _exerciseController = Get.put(ExerciseController());
 
   late YoutubePlayerController _controller;
-  late TextEditingController _idController;
-  late TextEditingController _seekToController;
-
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
+  // late TextEditingController _idController;
+  // late TextEditingController _seekToController;
+  //
+  // late PlayerState _playerState;
+  // late YoutubeMetaData _videoMetaData;
 
   _initData() async {
     await DefaultAssetBundle.of(context)
@@ -38,11 +38,8 @@ class _VideoInfoState extends State<VideoInfo> {
         videoInfo = json.decode(value);
       });
     });
-
     _exerciseController.getExercises();
     _categoryController.getCategories();
-    print("first test");
-    print(_exerciseController.exerciseList.length);
   }
 
   @override
@@ -65,10 +62,6 @@ class _VideoInfoState extends State<VideoInfo> {
 
   @override
   Widget build(BuildContext context) {
-    print("000000000000000000000000000000");
-
-    print(_exerciseController.exerciseList.length);
-    print("000000000000000000000000000000");
     return Scaffold(
         body: Container(
             decoration: _playArea == false

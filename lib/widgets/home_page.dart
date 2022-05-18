@@ -188,17 +188,12 @@ class _HomePageState extends State<HomePage> {
 
   _showCategories(){
     return Expanded(child: OverflowBox(child: Obx(() {
-      print("categoryController:" "$_categoryController");
-      print(_categoryController.categoryList.length);
-      print(_exerciseController.exerciseList.length);
-      print("..........................................");
       return ListView.builder(
           shrinkWrap: true,
           itemCount: (_categoryController.categoryList.length) ~/2,
           itemBuilder: (BuildContext context, i) {
-            print("categoryController:" "$_categoryController");
-            print(_categoryController.categoryList.length);
-            print(_exerciseController.exerciseList.length);
+            print("..................................................");
+            print((_categoryController.categoryList.length) ~/2);
             int a = 2 * i;
             int b = 2 * i + 1;
             return Row(

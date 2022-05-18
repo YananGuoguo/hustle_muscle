@@ -13,7 +13,9 @@ class CategoryController extends GetxController {
   var categoryList = <Category>[].obs;
 
   void getCategories() async {
+    print("Get Exercises");
     List<Map<String, dynamic>> categories = await DBHelper.queryCategory();
     categoryList.assignAll(categories.map((data)=> Category.fromJson(data)).toList());
+    print("in categoryList" "$categoryList");
   }
 }

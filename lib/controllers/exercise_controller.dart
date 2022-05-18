@@ -16,6 +16,7 @@ class ExerciseController extends GetxController {
   }
 
   void getExercises() async {
+    print("Get Exercises");
     List<Map<String, dynamic>> exercises = await DBHelper.query();
     exerciseList.assignAll(exercises.map((data)=> new Exercise.fromJson(data)).toList());
   }
