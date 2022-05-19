@@ -39,6 +39,7 @@ class MyInputField extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        readOnly: widget==null?false:true,
                           autofocus: false,
                           cursorColor: color
                               .AppColor.secondPageContainerGradient1stColor,
@@ -69,7 +70,8 @@ class MyInputField extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    widget==null?Container():Container(child:widget)
                   ],
                 ))
           ],

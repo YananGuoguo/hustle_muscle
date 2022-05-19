@@ -23,6 +23,19 @@ class _OperationsExerciseState extends State<OperationsExercise> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _repeatController = TextEditingController();
+  int _selectedCategoryId = 1;
+
+  String _selectedCategory = "abdominaux";
+  List<String> categoryId = [
+    'abdominaux',
+    'biceps',
+    'cuisses',
+    'dos',
+    'epaules',
+    'mollets',
+    'parties',
+    'triceps',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +74,33 @@ class _OperationsExerciseState extends State<OperationsExercise> {
               title: "Repeat",
               hint: "Enter Repeat",
               controller: _repeatController,
+            ),
+            MyInputField(
+              title: "Category",
+              hint: _selectedCategory,
+              widget: DropdownButton(
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.deepPurpleAccent,
+                ),
+                iconSize: 32,
+                elevation: 4,
+                underline: const SizedBox(
+                  height: 0,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedCategory = newValue!;
+                  });
+                },
+                items:
+                    categoryId.map<DropdownMenuItem<String>>((String? value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value!),
+                  );
+                }).toList(),
+              ),
             ),
             const SizedBox(
               height: 25,
@@ -108,15 +148,57 @@ class _OperationsExerciseState extends State<OperationsExercise> {
   }
 
   _addExerciseToDb() async {
-    int long = _exerciseController.exerciseList.length;
+    switch (_selectedCategory) {
+      case "abdominaux":
+        {
+          _selectedCategoryId = 1;
+        }
+        break;
+      case "biceps":
+        {
+          _selectedCategoryId = 2;
+        }
+        break;
+      case "cuisses":
+        {
+          _selectedCategoryId = 3;
+        }
+        break;
+      case "dos":
+        {
+          _selectedCategoryId = 4;
+        }
+        break;
+      case "epaules":
+        {
+          _selectedCategoryId = 5;
+        }
+        break;
+      case "mollets":
+        {
+          _selectedCategoryId = 6;
+        }
+        break;
+      case "parties":
+        {
+          _selectedCategoryId = 7;
+        }
+        break;
+      case "triceps":
+        {
+          _selectedCategoryId = 8;
+        }
+        break;
+    }
     int value = await _exerciseController.addExercise(
         exercise: Exercise(
-      title: _titleController.text,
-      description: _descriptionController.text,
-      time: int.parse(_timeController.text),
-      repeat: int.parse(_repeatController.text),
-    ));
+            title: _titleController.text,
+            description: _descriptionController.text,
+            time: int.parse(_timeController.text),
+            repeat: int.parse(_repeatController.text),
+            category: _selectedCategoryId,
+            img: "assets/squat3.jpg",
+            video: "https://www.youtube.com/watch?v=GQyWIur03aw"));
     print("My id is " "$value");
-    print("length:""$long");
   }
 }

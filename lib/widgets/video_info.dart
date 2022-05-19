@@ -304,7 +304,7 @@ class _VideoInfoState extends State<VideoInfo> {
 
   //4:30 runYoutubePlayer
   _onTapVideo(int index) {
-    String youtubeUrl = videoInfo[index]["videoUrl"];
+    String youtubeUrl = _exerciseController.exerciseList[index].video.toString();
     String? youtubeId = YoutubePlayer.convertUrlToId(youtubeUrl);
     final controller = YoutubePlayerController(
       initialVideoId: youtubeId!,
