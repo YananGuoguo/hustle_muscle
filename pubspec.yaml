@@ -68,6 +68,15 @@ flutter:
     - assets/
     - json/
     - assets/images/
+    - assets/musculation/abdominaux/
+    - assets/musculation/avant-bras/
+    - assets/musculation/biceps/
+    - assets/musculation/cuisses/
+    - assets/musculation/dos/
+    - assets/musculation/epaules/
+    - assets/musculation/mollets/
+    - assets/musculation/parties/
+    - assets/musculation/triceps/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

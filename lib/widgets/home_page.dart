@@ -16,26 +16,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // List info = [];
   final _categoryController = Get.put(CategoryController());
   final _exerciseController = Get.put(ExerciseController());
 
   _initData() {
-    // DefaultAssetBundle.of(context).loadString("json/info.json").then((value) {
-    //   info = json.decode(value);
-    // });
     _exerciseController.getExercises();
     _categoryController.getCategories();
-    print("first test");
-    print(_exerciseController.exerciseList.length);
   }
 
   @override
   void initState() {
     super.initState();
     _initData();
-    print("second test");
-    print(_exerciseController.exerciseList.length);
   }
 
   @override
@@ -77,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(child: Container()),
                     InkWell(
                         onTap: () {
-                          Get.to(() => const VideoInfo());
+                          Get.to(const VideoInfo(), arguments: -1);
                         },
                         child: Row(children: [
                           Text("Details",
@@ -198,7 +190,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[a].category.toString());
+                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[a].id);
                   },
                   child: Container(
                       width: 170,
@@ -236,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(child: Container()),
                 InkWell(
                   onTap: () {
-                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[b].category.toString());
+                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[b].id);
                   },
                   child: Container(
                       width: 170,

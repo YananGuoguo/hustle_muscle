@@ -4,11 +4,12 @@ class Exercise {
   String? img;
   int? time;
   int? repeat;
-  String? category;
+  int? category;
   String? description;
+  String? video;
 
   Exercise({this.id, this.title, this.img, this.time, this.repeat, this.category,
-      this.description});
+      this.description, this.video});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -19,6 +20,7 @@ class Exercise {
     data['repeat'] = repeat;
     data['category'] = category;
     data['description'] = description;
+    data['video'] = video;
     return data;
   }
 
@@ -30,5 +32,6 @@ class Exercise {
     repeat = json['repeat'];
     category = json['category'];
     description = json['description'];
+    video = json['video'];
   }
 }

@@ -19,7 +19,7 @@ class VideoInfo extends StatefulWidget {
 class _VideoInfoState extends State<VideoInfo> {
   List videoInfo = [];
   bool _playArea = false;
-  String categoryShow = Get.arguments;
+  int categoryShow = Get.arguments;
 
   final _categoryController = Get.put(CategoryController());
   final _exerciseController = Get.put(ExerciseController());
@@ -39,8 +39,14 @@ class _VideoInfoState extends State<VideoInfo> {
         videoInfo = json.decode(value);
       });
     });
-    _exerciseController.getExercises();
+
     _categoryController.getCategories();
+    if(categoryShow == -1) {
+      _exerciseController.getExercises();
+    }else{
+      _exerciseController.getExerciseByCategory(categoryShow);
+    }
+
     print("........$categoryShow.........");
   }
 
@@ -316,7 +322,7 @@ class _VideoInfoState extends State<VideoInfo> {
   _listView() {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
-        itemCount: videoInfo.length,
+        itemCount: _exerciseController.exerciseList.length,
         itemBuilder: (context, int index) {
           return GestureDetector(
             onTap: () {
@@ -341,7 +347,7 @@ class _VideoInfoState extends State<VideoInfo> {
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   image:
-                                      AssetImage(videoInfo[index]["thumbnail"]),
+                                      AssetImage(_exerciseController.exerciseList[index].img.toString()),
                                   fit: BoxFit.cover,
                                 ))),
                         const SizedBox(
@@ -352,7 +358,7 @@ class _VideoInfoState extends State<VideoInfo> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              videoInfo[index]["title"],
+                              _exerciseController.exerciseList[index].title.toString(),
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -364,7 +370,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             Padding(
                               padding: const EdgeInsets.only(top: 3),
                               child: Text(
-                                videoInfo[index]["time"],
+                                "Repeat: "+ _exerciseController.exerciseList[index].repeat.toString(),
                                 style: TextStyle(color: Colors.grey[500]),
                               ),
                             )
@@ -385,7 +391,7 @@ class _VideoInfoState extends State<VideoInfo> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Center(
-                              child: Text("15s rest",
+                              child: Text("30s rest",
                                   style: TextStyle(color: Color(0xFF839fed)))),
                         ),
                         Row(children: [
