@@ -6,25 +6,25 @@ import 'package:get/get.dart';
 import 'package:hustle_muscle/controllers/exercise_controller.dart';
 import '../models/class_exercise.dart';
 import 'colors.dart' as color;
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'input_field.dart';
 
-class OperationsExercise extends StatefulWidget {
-  const OperationsExercise({Key? key}) : super(key: key);
+class EditExercise extends StatefulWidget {
+  const EditExercise({Key? key}) : super(key: key);
 
   @override
-  State<OperationsExercise> createState() => _OperationsExerciseState();
+  State<EditExercise> createState() => _EditExerciseState();
 }
 
-class _OperationsExerciseState extends State<OperationsExercise> {
+class _EditExerciseState extends State<EditExercise> {
   final ExerciseController _exerciseController = Get.put(ExerciseController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _repeatController = TextEditingController();
+  Exercise exercise = Get.arguments;
   String imageUri = "";
   int _selectedCategoryId = 1;
+  int _exerciseID = 1;
 
   String _selectedCategory = "abdominaux";
   List<String> categoryId = [
@@ -37,6 +37,64 @@ class _OperationsExerciseState extends State<OperationsExercise> {
     'parties',
     'triceps',
   ];
+
+  _init() {
+    _exerciseID = exercise.id!;
+    _selectedCategoryId = exercise.category!;
+    switch (_selectedCategoryId) {
+      case 1:
+        {
+          _selectedCategory = "abdominaux";
+        }
+        break;
+      case 2:
+        {
+          _selectedCategory = "biceps";
+        }
+        break;
+      case 3:
+        {
+          _selectedCategory = "cuisses";
+        }
+        break;
+      case 4:
+        {
+          _selectedCategory = "dos";
+        }
+        break;
+      case 5:
+        {
+          _selectedCategory = "epaules";
+        }
+        break;
+      case 6:
+        {
+          _selectedCategory = "mollets";
+        }
+        break;
+      case 7:
+        {
+          _selectedCategory = "parties";
+        }
+        break;
+      case 8:
+        {
+          _selectedCategory = "triceps";
+        }
+        break;
+    }
+    _descriptionController.text=exercise.description.toString();
+    _titleController.text = exercise.title!;
+    _timeController.text = exercise.time.toString();
+    _repeatController.text = exercise.repeat.toString();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+    print("_selectedCategory:::$_selectedCategory");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +113,7 @@ class _OperationsExerciseState extends State<OperationsExercise> {
         child: SingleChildScrollView(
             child: Column(
           children: [
-            const Text("Add Exercise", style: TextStyle(fontSize: 30)),
+            const Text("Update Exercise", style: TextStyle(fontSize: 30)),
             MyInputField(
                 title: "Title",
                 hint: "Enter your title",
@@ -105,20 +163,41 @@ class _OperationsExerciseState extends State<OperationsExercise> {
             const SizedBox(
               height: 25,
             ),
-            TextButton(
-              onPressed: () => _validateData(),
-              child: const Text(
-                'Create',
-              ),
-              style: TextButton.styleFrom(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 5, bottom: 5),
-                  primary: Colors.white,
-                  backgroundColor:
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => _validateData(),
+                  child: const Text(
+                    'Edit',
+                  ),
+                  style: TextButton.styleFrom(
+                    fixedSize: const Size.fromWidth(170),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 5),
+                      primary: Colors.white,
+                      backgroundColor:
                       color.AppColor.secondPageContainerGradient1stColor,
-                  textStyle: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold)),
-            ),
+                      textStyle: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold)),
+                ),
+                Expanded(child: Container()),
+                TextButton(
+                  onPressed: () => _onDelete(),
+                  child: const Text(
+                    'Delete',
+                  ),
+                  style: TextButton.styleFrom(
+                      fixedSize: const Size.fromWidth(170),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 5),
+                      primary: Colors.white,
+                      backgroundColor:
+                      Colors.pink,
+                      textStyle: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            )
           ],
         )),
       ),
@@ -130,8 +209,8 @@ class _OperationsExerciseState extends State<OperationsExercise> {
         _descriptionController.text.isNotEmpty &&
         _timeController.text.isNotEmpty &&
         _repeatController.text.isNotEmpty) {
-      _addExerciseToDb();
       _exerciseController.getExerciseByCategory(categoryId);
+      _updateExerciseToDb();
       Get.back();
     } else if (_titleController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
@@ -148,7 +227,13 @@ class _OperationsExerciseState extends State<OperationsExercise> {
     }
   }
 
-  _addExerciseToDb() async {
+  _onDelete(){
+    _exerciseController.delete(exercise);
+    _exerciseController.getExerciseByCategory(exercise.category);
+    Get.back();
+  }
+
+  _updateExerciseToDb() async {
     switch (_selectedCategory) {
       case "abdominaux":
         {
@@ -199,8 +284,9 @@ class _OperationsExerciseState extends State<OperationsExercise> {
         }
         break;
     }
-    int value = await _exerciseController.addExercise(
+    await _exerciseController.editExercise(
         exercise: Exercise(
+            id: _exerciseID,
             title: _titleController.text,
             description: _descriptionController.text,
             time: int.parse(_timeController.text),
@@ -208,6 +294,5 @@ class _OperationsExerciseState extends State<OperationsExercise> {
             category: _selectedCategoryId,
             img: imageUri,
             video: "https://www.youtube.com/watch?v=GQyWIur03aw"));
-    print("My id is " "$value");
   }
 }

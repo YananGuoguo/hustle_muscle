@@ -16,6 +16,11 @@ class ExerciseController extends GetxController {
     return await DBHelper.insert(exercise);
   }
 
+  Future<void> editExercise({Exercise? exercise}) async {
+    var res = await DBHelper.update(exercise);
+    print("Edit exercise in exercise controller: $res");
+  }
+
   void getExercises() async {
     print("Get all Exercises through controller");
     List<Map<String, dynamic>> exercises = await DBHelper.query();

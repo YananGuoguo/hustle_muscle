@@ -67,12 +67,18 @@ class DBHelper {
   }
 
   static Future<int> insert(Exercise? exercise) async {
-    print("insert!!!");
+    print("insert in db_helper!!!");
     return await _db?.insert(_tableName, exercise!.toJson()) ?? 1;
   }
 
+  static Future<int> update(Exercise? exercise) async {
+    print("update in db_helper!!!");
+    var res = await _db?.update(_tableName, exercise!.toJson(), where: "id = ?", whereArgs: [exercise.id]) ?? 1;
+    return res;
+  }
+
   static Future<List<Map<String, dynamic>>> query() async {
-    print("query function called");
+    print("query function called in db_helper!!!");
     return await _db!.query(_tableName);
   }
 

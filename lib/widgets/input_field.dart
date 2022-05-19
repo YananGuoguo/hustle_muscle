@@ -29,7 +29,7 @@ class MyInputField extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     color: Colors.black)),
             Container(
-                height: 40,
+                height: 45,
                 margin: const EdgeInsets.only(top: 5),
                 padding: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
@@ -39,10 +39,11 @@ class MyInputField extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        minLines: 1,
+                        maxLines: 20,
                         readOnly: widget==null?false:true,
                           autofocus: false,
-                          cursorColor: color
-                              .AppColor.secondPageContainerGradient1stColor,
+                          cursorColor: Colors.purpleAccent,
                           controller: controller,
                           style: const TextStyle(
                             fontSize: 16,

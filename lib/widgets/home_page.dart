@@ -70,7 +70,8 @@ class _HomePageState extends State<HomePage> {
                     InkWell(
                         onTap: () {
                           debugPrint("details pressed");
-                          Get.to(const VideoInfo(), arguments: [
+                          _exerciseController.getExercises();
+                          Get.to(() => const VideoInfo(), arguments: [
                             _exerciseController.exerciseList,
                             -1
                           ]);
@@ -196,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () async {
                     _exerciseController.getExerciseByCategory(
                         _categoryController.categoryList[a].id);
-                    await Get.to(const VideoInfo(), arguments: [
+                    await Get.to(() => const VideoInfo(), arguments: [
                       _exerciseController.exerciseList,
                       _categoryController.categoryList[a].id
                     ]);
@@ -242,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () async {
                     _exerciseController.getExerciseByCategory(
                         _categoryController.categoryList[b].id);
-                    await Get.to(const VideoInfo(), arguments: [
+                    await Get.to(() => const VideoInfo(), arguments: [
                       _exerciseController.exerciseList,
                       _categoryController.categoryList[b].id
                     ]);

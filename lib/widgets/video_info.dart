@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hustle_muscle/widgets/edit_exercise.dart';
 import 'package:hustle_muscle/widgets/operations_exercise.dart';
+import 'package:hustle_muscle/widgets/video_detail.dart';
 import '../controllers/exercise_controller.dart';
 import '../models/class_exercise.dart';
 import 'colors.dart' as color;
@@ -18,19 +20,66 @@ class VideoInfo extends StatefulWidget {
 class _VideoInfoState extends State<VideoInfo> {
   RxList<Exercise> exerciseShow = Get.arguments[0];
   int categoryId = Get.arguments[1];
+  String categoryTitle = "";
+  int _length = 0;
   final _exerciseController = Get.put(ExerciseController());
 
   _initData() {
     _exerciseController.exerciseList = exerciseShow;
+    switch (categoryId) {
+      case 1:
+        {
+          categoryTitle = "abdominaux";
+        }
+        break;
+      case 2:
+        {
+          categoryTitle = "biceps";
+        }
+        break;
+      case 3:
+        {
+          categoryTitle = "cuisses";
+        }
+        break;
+      case 4:
+        {
+          categoryTitle = "dos";
+        }
+        break;
+      case 5:
+        {
+          categoryTitle = "epaules";
+        }
+        break;
+      case 6:
+        {
+          categoryTitle = "mollets";
+        }
+        break;
+      case 7:
+        {
+          categoryTitle = "parties";
+        }
+        break;
+      case 8:
+        {
+          categoryTitle = "triceps";
+        }
+        break;
+      case -1:
+        {
+          categoryTitle = "All Workouts";
+        }
+        break;
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _initData();
-    int _length = exerciseShow.length;
-    print("Exercise numbers::::::$_length");
-    debugPrint("Categoryid from home page:::::::::$categoryId");
+    _length = exerciseShow.length;
   }
 
   @override
@@ -67,13 +116,18 @@ class _VideoInfoState extends State<VideoInfo> {
                             ),
                             Expanded(child: Container()),
                             InkWell(
+                              //Create fun()
                               onTap: () async {
-                                debugPrint(":::::::add pressed:::::::");
-                                await Get.to(() => const OperationsExercise());
-                                // setState(() {
-                                _exerciseController.refreshExercise(categoryId);
-                                // });
-                                debugPrint("...................after add");
+                                await Get.to(()=>const OperationsExercise());
+                                _length++;
+                                setState(() {
+                                  categoryId == -1
+                                      ? _exerciseController.getExercises()
+                                      : _exerciseController
+                                          .getExerciseByCategory(categoryId);
+                                  _length++;
+                                  _length=_exerciseController.exerciseList.length;
+                                });
                               },
                               child: Row(
                                 children: [
@@ -93,13 +147,13 @@ class _VideoInfoState extends State<VideoInfo> {
                           ],
                         ),
                         const SizedBox(height: 15),
-                        Text("Legs Toning",
+                        Text(categoryTitle,
                             style: TextStyle(
                               fontSize: 20,
                               color: color.AppColor.secondPageTitleColor,
                             )),
                         const SizedBox(height: 5),
-                        Text("Glutes Workout",
+                        Text("Your Own Workout",
                             style: TextStyle(
                               fontSize: 20,
                               color: color.AppColor.secondPageTitleColor,
@@ -183,24 +237,38 @@ class _VideoInfoState extends State<VideoInfo> {
                             Row(
                               children: [
                                 const SizedBox(width: 30),
-                                Text("Circuit 1: Legs Toning",
+                                Text(categoryTitle,
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                         color: color.AppColor.circuitsColor)),
                                 Expanded(child: Container()),
-                                Row(
-                                  children: [
-                                    Icon(Icons.loop,
-                                        size: 30,
-                                        color: color.AppColor.loopColor),
-                                    const SizedBox(width: 10),
-                                    Text("3 sets",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: color.AppColor.setsColor,
-                                        ))
-                                  ],
+
+                                //TODO: Ontap refresh
+
+                                InkWell(
+                                  onTap: (){
+                                      categoryId == -1
+                                          ? _exerciseController.getExercises()
+                                          : _exerciseController
+                                          .getExerciseByCategory(categoryId);
+                                      setState(() {
+
+                                      });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.loop,
+                                          size: 30,
+                                          color: color.AppColor.loopColor),
+                                      const SizedBox(width: 10),
+                                      Text("$_length actions",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: color.AppColor.setsColor,
+                                          ))
+                                    ],
+                                  ),
                                 ),
                                 const SizedBox(width: 30),
                               ],
@@ -215,11 +283,6 @@ class _VideoInfoState extends State<VideoInfo> {
             )));
   }
 
-  //4:30 runYoutubePlayer
-  _onTapVideo(int index) {
-    print("tap video img");
-  }
-
   _listView() {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
@@ -231,10 +294,10 @@ class _VideoInfoState extends State<VideoInfo> {
                 children: [
                   Row(
                     children: [
+                      //TODO: Get.to video_detail Page
                       GestureDetector(
                         onTap: () {
-                          _onTapVideo(index);
-                          debugPrint("pressed 111111");
+                          Get.to(()=>const VideoDetail(), arguments: exerciseShow[index].video.toString());
                         },
                         child: Container(
                             width: 80,
@@ -276,8 +339,16 @@ class _VideoInfoState extends State<VideoInfo> {
                       ),
                       Expanded(child: Container()),
                       InkWell(
-                        onTap: () {
-                          debugPrint("2222222222");
+                        onTap: () async {
+                          await Get.to(()=>const EditExercise(), arguments: exerciseShow[index]);
+                          setState(() {
+                            categoryId == -1
+                                ? _exerciseController.getExercises()
+                                : _exerciseController
+                                .getExerciseByCategory(categoryId);
+                            _length++;
+                            _length=_exerciseController.exerciseList.length;
+                          });
                         },
                         child: const Icon(Icons.edit,
                             size: 35, color: Colors.blueAccent),
@@ -286,12 +357,16 @@ class _VideoInfoState extends State<VideoInfo> {
                         width: 28,
                       ),
                       GestureDetector(
+                        //Delete Function
                         onTap: () {
                           _exerciseController.delete(exerciseShow[index]);
-
                           setState(() {
-                            debugPrint("CategoryId>>>>>>>>>>>>>>>>>>>>>>>>$categoryId");
-                            _exerciseController.getExerciseByCategory(categoryId);
+                            categoryId == -1
+                                ? _exerciseController.getExercises()
+                                : _exerciseController
+                                .getExerciseByCategory(categoryId);
+                            _length--;
+                            _length = _exerciseController.exerciseList.length;
                           });
                         },
                         child: const Icon(Icons.delete,
