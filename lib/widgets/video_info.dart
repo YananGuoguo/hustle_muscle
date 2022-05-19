@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hustle_muscle/widgets/operations_exercise.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../controllers/category_controller.dart';
 import '../controllers/exercise_controller.dart';
+import '../models/class_exercise.dart';
 import 'colors.dart' as color;
 
 class VideoInfo extends StatefulWidget {
@@ -17,233 +16,161 @@ class VideoInfo extends StatefulWidget {
 }
 
 class _VideoInfoState extends State<VideoInfo> {
-  List videoInfo = [];
-  bool _playArea = false;
-  int categoryShow = Get.arguments;
-
-  final _categoryController = Get.put(CategoryController());
+  RxList<Exercise> exerciseShow = Get.arguments[0];
+  int categoryId = Get.arguments[1];
   final _exerciseController = Get.put(ExerciseController());
 
-  YoutubePlayerController? _controller;
-  // late TextEditingController _idController;
-  // late TextEditingController _seekToController;
-  //
-  // late PlayerState _playerState;
-  // late YoutubeMetaData _videoMetaData;
-
-  _initData() async {
-    await DefaultAssetBundle.of(context)
-        .loadString("json/videoinfo.json")
-        .then((value) {
-      setState(() {
-        videoInfo = json.decode(value);
-      });
-    });
-
-    _categoryController.getCategories();
-    if(categoryShow == -1) {
-      _exerciseController.getExercises();
-    }else{
-      _exerciseController.getExerciseByCategory(categoryShow);
-    }
-
-    print("........$categoryShow.........");
+  _initData() {
+    _exerciseController.exerciseList = exerciseShow;
   }
 
   @override
   void initState() {
     super.initState();
     _initData();
-  }
-
-  @override
-  void deactivate() {
-    _controller?.pause();
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
+    int _length = exerciseShow.length;
+    print("Exercise numbers::::::$_length");
+    debugPrint("Categoryid from home page:::::::::$categoryId");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            decoration: _playArea == false
-                ? BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                        color.AppColor.gradientFirst,
-                        color.AppColor.gradientSecond,
-                      ],
-                        begin: const FractionalOffset(0.0, 0.4),
-                        end: Alignment.topRight))
-                : BoxDecoration(
-                    color: color.AppColor.gradientSecond,
-                  ),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                  color.AppColor.gradientFirst,
+                  color.AppColor.gradientSecond,
+                ],
+                    begin: const FractionalOffset(0.0, 0.4),
+                    end: Alignment.topRight)),
             child: Column(
               children: [
-                _playArea == false
-                    ? Container(
-                        padding:
-                            const EdgeInsets.only(top: 40, right: 30, left: 30),
-                        width: MediaQuery.of(context).size.width,
-                        height: 220,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                Container(
+                    padding:
+                        const EdgeInsets.only(top: 40, right: 30, left: 30),
+                    width: MediaQuery.of(context).size.width,
+                    height: 220,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Get.back();
-                                  },
-                                  child: Icon(Icons.arrow_back_ios_new_outlined,
+                            InkWell(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Icon(Icons.arrow_back_ios_new_outlined,
+                                  size: 16,
+                                  color: color.AppColor.secondPageIconColor),
+                            ),
+                            Expanded(child: Container()),
+                            InkWell(
+                              onTap: () async {
+                                debugPrint(":::::::add pressed:::::::");
+                                await Get.to(() => const OperationsExercise());
+                                // setState(() {
+                                _exerciseController.refreshExercise(categoryId);
+                                // });
+                                debugPrint("...................after add");
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.add_outlined,
                                       size: 16,
                                       color:
                                           color.AppColor.secondPageIconColor),
-                                ),
-                                Expanded(child: Container()),
-                                InkWell(
-                                  onTap: () async {
-                                    debugPrint("add pressed");
-                                    await Get.to(() => const OperationsExercise());
-                                    // _exerciseController.getExercises();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.add_outlined,
-                                          size: 16,
-                                          color: color
-                                              .AppColor.secondPageIconColor),
-                                      Text("Add New Exercise",
-                                          style: TextStyle(
+                                  Text("Add New Exercise",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color:
+                                            color.AppColor.secondPageIconColor,
+                                      ))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Text("Legs Toning",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: color.AppColor.secondPageTitleColor,
+                            )),
+                        const SizedBox(height: 5),
+                        Text("Glutes Workout",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: color.AppColor.secondPageTitleColor,
+                            )),
+                        const SizedBox(height: 30),
+                        Row(
+                          children: [
+                            Container(
+                              width: 90,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        color.AppColor
+                                            .secondPageContainerGradient1stColor,
+                                        color.AppColor
+                                            .secondPageContainerGradient2ndColor,
+                                      ],
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.topRight)),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.timer_sharp,
+                                        size: 18,
+                                        color:
+                                            color.AppColor.secondPageIconColor),
+                                    const SizedBox(width: 5),
+                                    Text("68 min",
+                                        style: TextStyle(
                                             fontSize: 16,
                                             color: color
-                                                .AppColor.secondPageIconColor,
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                                .AppColor.secondPageIconColor))
+                                  ]),
                             ),
-                            const SizedBox(height: 15),
-                            Text("Legs Toning",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: color.AppColor.secondPageTitleColor,
-                                )),
-                            const SizedBox(height: 5),
-                            Text("Glutes Workout",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: color.AppColor.secondPageTitleColor,
-                                )),
-                            const SizedBox(height: 30),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 90,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            color.AppColor
-                                                .secondPageContainerGradient1stColor,
-                                            color.AppColor
-                                                .secondPageContainerGradient2ndColor,
-                                          ],
-                                          begin: Alignment.bottomLeft,
-                                          end: Alignment.topRight)),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.timer_sharp,
-                                            size: 18,
+                            Expanded(child: Container()),
+                            Container(
+                              width: 250,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        color.AppColor
+                                            .secondPageContainerGradient1stColor,
+                                        color.AppColor
+                                            .secondPageContainerGradient2ndColor,
+                                      ],
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.topRight)),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.fitness_center_outlined,
+                                        size: 18,
+                                        color:
+                                            color.AppColor.secondPageIconColor),
+                                    const SizedBox(width: 5),
+                                    Text("Resistent band, kettebell",
+                                        style: TextStyle(
+                                            fontSize: 16,
                                             color: color
-                                                .AppColor.secondPageIconColor),
-                                        const SizedBox(width: 5),
-                                        Text("68 min",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: color.AppColor
-                                                    .secondPageIconColor))
-                                      ]),
-                                ),
-                                Expanded(child: Container()),
-                                Container(
-                                  width: 250,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            color.AppColor
-                                                .secondPageContainerGradient1stColor,
-                                            color.AppColor
-                                                .secondPageContainerGradient2ndColor,
-                                          ],
-                                          begin: Alignment.bottomLeft,
-                                          end: Alignment.topRight)),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.fitness_center_outlined,
-                                            size: 18,
-                                            color: color
-                                                .AppColor.secondPageIconColor),
-                                        const SizedBox(width: 5),
-                                        Text("Resistent band, kettebell",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: color.AppColor
-                                                    .secondPageIconColor))
-                                      ]),
-                                )
-                              ],
-                            ),
-                            const SizedBox(width: 20)
+                                                .AppColor.secondPageIconColor))
+                                  ]),
+                            )
                           ],
-                        ))
-                    : Column(children: [
-                        Container(
-                          height: 100,
-                          padding: const EdgeInsets.only(
-                              top: 50, left: 30, right: 30),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  debugPrint("tapped");
-                                  setState(() {
-                                    _playArea = false;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.arrow_back_ios_new_outlined,
-                                  size: 20,
-                                  color: color.AppColor.secondPageIconColor,
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(),
-                              ),
-                              Icon(
-                                Icons.info_outline,
-                                size: 20,
-                                color: color.AppColor.secondPageTopIconColor,
-                              )
-                            ],
-                          ),
                         ),
-                        _playView(context),
-                      ]),
+                        const SizedBox(width: 20)
+                      ],
+                    )),
                 Expanded(
                     child: Container(
                         decoration: const BoxDecoration(
@@ -288,135 +215,128 @@ class _VideoInfoState extends State<VideoInfo> {
             )));
   }
 
-  Widget _playView(BuildContext context) {
-    final controller = _controller;
-    if(controller!=null){return YoutubePlayerBuilder(
-        player: YoutubePlayer(
-          controller: controller,
-        ),
-        builder: (context, player) {
-          return AspectRatio(aspectRatio: 16 / 9, child: player);
-        });
-    }else{
-      return const Text("Being initialized please wait!");
-    }
-  }
-
   //4:30 runYoutubePlayer
   _onTapVideo(int index) {
-    String youtubeUrl = _exerciseController.exerciseList[index].video.toString();
-    String? youtubeId = YoutubePlayer.convertUrlToId(youtubeUrl);
-    final controller = YoutubePlayerController(
-      initialVideoId: youtubeId!,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-        enableCaption: true,
-        isLive: false,
-      ),
-    );
-    _controller = controller;
-    setState(() {});
+    print("tap video img");
   }
 
   _listView() {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
-        itemCount: _exerciseController.exerciseList.length,
+        itemCount: exerciseShow.length,
         itemBuilder: (context, int index) {
-          return GestureDetector(
-            onTap: () {
-              _onTapVideo(index);
-              debugPrint(index.toString());
-              setState(() {
-                if (_playArea == false) {
-                  _playArea = true;
-                }
-              });
-            },
-            child: SizedBox(
-                height: 120,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
+          return SizedBox(
+              height: 120,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          _onTapVideo(index);
+                          debugPrint("pressed 111111");
+                        },
+                        child: Container(
                             width: 80,
                             height: 80,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
-                                  image:
-                                      AssetImage(_exerciseController.exerciseList[index].img.toString()),
+                                  image: AssetImage(
+                                      exerciseShow[index].img.toString()),
                                   fit: BoxFit.cover,
                                 ))),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _exerciseController.exerciseList[index].title.toString(),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            exerciseShow[index].title.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(
-                              height: 7,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 3),
-                              child: Text(
-                                "Repeat: "+ _exerciseController.exerciseList[index].repeat.toString(),
-                                style: TextStyle(color: Colors.grey[500]),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFeaeefc),
-                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Center(
-                              child: Text("30s rest",
-                                  style: TextStyle(color: Color(0xFF839fed)))),
+                          const SizedBox(
+                            height: 7,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Text(
+                              "Repeat: " +
+                                  exerciseShow[index].repeat.toString(),
+                              style: TextStyle(color: Colors.grey[500]),
+                            ),
+                          )
+                        ],
+                      ),
+                      Expanded(child: Container()),
+                      InkWell(
+                        onTap: () {
+                          debugPrint("2222222222");
+                        },
+                        child: const Icon(Icons.edit,
+                            size: 35, color: Colors.blueAccent),
+                      ),
+                      const SizedBox(
+                        width: 28,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _exerciseController.delete(exerciseShow[index]);
+
+                          setState(() {
+                            debugPrint("CategoryId>>>>>>>>>>>>>>>>>>>>>>>>$categoryId");
+                            _exerciseController.getExerciseByCategory(categoryId);
+                          });
+                        },
+                        child: const Icon(Icons.delete,
+                            size: 35, color: Colors.blueAccent),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFeaeefc),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        Row(children: [
-                          for (int i = 0; i < 70; i++)
-                            i.isEven
-                                ? Container(
-                                    width: 3.5,
-                                    height: 1,
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xFF839fed),
-                                        borderRadius: BorderRadius.circular(2)),
-                                  )
-                                : Container(
-                                    width: 3.5,
-                                    height: 1,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(2)),
-                                  )
-                        ])
-                      ],
-                    )
-                  ],
-                )),
-          );
+                        child: const Center(
+                            child: Text("30s rest",
+                                style: TextStyle(color: Color(0xFF839fed)))),
+                      ),
+                      Row(children: [
+                        for (int i = 0; i < 70; i++)
+                          i.isEven
+                              ? Container(
+                                  width: 3.5,
+                                  height: 1,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xFF839fed),
+                                      borderRadius: BorderRadius.circular(2)),
+                                )
+                              : Container(
+                                  width: 3.5,
+                                  height: 1,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(2)),
+                                )
+                      ])
+                    ],
+                  )
+                ],
+              ));
         });
   }
 }

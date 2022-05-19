@@ -10,27 +10,38 @@ class ExerciseController extends GetxController {
   }
 
   var exerciseList = <Exercise>[].obs;
-  // var exerciseListByCategory = <Exercise>[].obs;
+  var exerciseListByCategory = <Exercise>[].obs;
 
-  Future<int> addExercise({Exercise? exercise}) async{
+  Future<int> addExercise({Exercise? exercise}) async {
     return await DBHelper.insert(exercise);
   }
 
   void getExercises() async {
-    print("Get Exercises");
+    print("Get all Exercises through controller");
     List<Map<String, dynamic>> exercises = await DBHelper.query();
-    exerciseList.assignAll(exercises.map((data)=> Exercise.fromJson(data)).toList());
+    exerciseList
+        .assignAll(exercises.map((data) => Exercise.fromJson(data)).toList());
   }
 
   void getExerciseByCategory(category) async {
     print("Call queryExerciseByCategory");
-    List<Map<String, dynamic>> exercises = await DBHelper.queryExerciseByCategory(category);
-    exerciseList.assignAll(exercises.map((data)=> Exercise.fromJson(data)).toList());
+    List<Map<String, dynamic>> exercises =
+        await DBHelper.queryExerciseByCategory(category);
+    exerciseList
+        .assignAll(exercises.map((data) => Exercise.fromJson(data)).toList());
   }
 
-  void delete(Exercise exercise){
+  Future<RxList<Exercise>> refreshExercise(categoryId) async {
+    if (categoryId == -1) {
+      getExercises();
+    } else {
+      getExerciseByCategory(categoryId);
+    }
+    return exerciseList;
+  }
+
+  void delete(Exercise exercise) {
     var val = DBHelper.delete(exercise);
-    print (val);
+    print("delete in exercise controller: $val");
   }
-
 }

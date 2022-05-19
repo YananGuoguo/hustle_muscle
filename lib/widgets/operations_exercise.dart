@@ -45,7 +45,6 @@ class _OperationsExerciseState extends State<OperationsExercise> {
           backgroundColor: color.AppColor.secondPageContainerGradient1stColor,
           leading: GestureDetector(
               onTap: () {
-                debugPrint("Go back");
                 Get.back();
               },
               child: const Icon(Icons.arrow_back_ios_outlined,
@@ -130,6 +129,8 @@ class _OperationsExerciseState extends State<OperationsExercise> {
         _descriptionController.text.isNotEmpty &&
         _timeController.text.isNotEmpty &&
         _repeatController.text.isNotEmpty) {
+      _exerciseController.refreshExercise(categoryId);
+      _exerciseController.getExerciseByCategory(categoryId);
       _addExerciseToDb();
       Get.back();
     } else if (_titleController.text.isEmpty ||

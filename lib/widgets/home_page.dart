@@ -69,7 +69,11 @@ class _HomePageState extends State<HomePage> {
                     Expanded(child: Container()),
                     InkWell(
                         onTap: () {
-                          Get.to(const VideoInfo(), arguments: -1);
+                          debugPrint("details pressed");
+                          Get.to(const VideoInfo(), arguments: [
+                            _exerciseController.exerciseList,
+                            -1
+                          ]);
                         },
                         child: Row(children: [
                           Text("Details",
@@ -178,19 +182,24 @@ class _HomePageState extends State<HomePage> {
             )));
   }
 
-  _showCategories(){
+  _showCategories() {
     return Expanded(child: OverflowBox(child: Obx(() {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: (_categoryController.categoryList.length) ~/2,
+          itemCount: (_categoryController.categoryList.length) ~/ 2,
           itemBuilder: (BuildContext context, i) {
             int a = 2 * i;
             int b = 2 * i + 1;
             return Row(
               children: [
                 InkWell(
-                  onTap: () {
-                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[a].id);
+                  onTap: () async {
+                    _exerciseController.getExerciseByCategory(
+                        _categoryController.categoryList[a].id);
+                    await Get.to(const VideoInfo(), arguments: [
+                      _exerciseController.exerciseList,
+                      _categoryController.categoryList[a].id
+                    ]);
                   },
                   child: Container(
                       width: 170,
@@ -201,7 +210,9 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
-                              image: AssetImage(_categoryController.categoryList[a].thumbnail.toString())),
+                              image: AssetImage(_categoryController
+                                  .categoryList[a].thumbnail
+                                  .toString())),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 3,
@@ -217,18 +228,24 @@ class _HomePageState extends State<HomePage> {
                       child: Center(
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Text(_categoryController.categoryList[a].category.toString(),
+                          child: Text(
+                              _categoryController.categoryList[a].category
+                                  .toString(),
                               style: TextStyle(
                                   fontSize: 15,
-                                  color:
-                                  color.AppColor.homePageDetail)),
+                                  color: color.AppColor.homePageDetail)),
                         ),
                       )),
                 ),
                 Expanded(child: Container()),
                 InkWell(
-                  onTap: () {
-                    Get.to(const VideoInfo(), arguments: _categoryController.categoryList[b].id);
+                  onTap: () async {
+                    _exerciseController.getExerciseByCategory(
+                        _categoryController.categoryList[b].id);
+                    await Get.to(const VideoInfo(), arguments: [
+                      _exerciseController.exerciseList,
+                      _categoryController.categoryList[b].id
+                    ]);
                   },
                   child: Container(
                       width: 170,
@@ -239,7 +256,9 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
-                              image: AssetImage(_categoryController.categoryList[b].thumbnail.toString())),
+                              image: AssetImage(_categoryController
+                                  .categoryList[b].thumbnail
+                                  .toString())),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 3,
@@ -255,11 +274,12 @@ class _HomePageState extends State<HomePage> {
                       child: Center(
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Text(_categoryController.categoryList[b].category.toString(),
+                          child: Text(
+                              _categoryController.categoryList[b].category
+                                  .toString(),
                               style: TextStyle(
                                   fontSize: 15,
-                                  color:
-                                  color.AppColor.homePageDetail)),
+                                  color: color.AppColor.homePageDetail)),
                         ),
                       )),
                 ),
