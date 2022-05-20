@@ -297,7 +297,12 @@ class _VideoInfoState extends State<VideoInfo> {
                       //TODO: Get.to video_detail Page
                       GestureDetector(
                         onTap: () {
-                          Get.to(()=>const VideoDetail(), arguments: exerciseShow[index].video.toString());
+                          Get.to(()=>const VideoDetail(), arguments: [exerciseShow[index].video.toString(),
+                            exerciseShow[index].title.toString(),
+                            exerciseShow[index].description.toString(),
+                            exerciseShow[index].repeat.toString(),
+                            exerciseShow[index].time.toString(),
+                          ]);
                         },
                         child: Container(
                             width: 80,

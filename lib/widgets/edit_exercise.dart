@@ -83,7 +83,7 @@ class _EditExerciseState extends State<EditExercise> {
         }
         break;
     }
-    _descriptionController.text=exercise.description.toString();
+    _descriptionController.text = exercise.description.toString();
     _titleController.text = exercise.title!;
     _timeController.text = exercise.time.toString();
     _repeatController.text = exercise.repeat.toString();
@@ -168,15 +168,15 @@ class _EditExerciseState extends State<EditExercise> {
                 TextButton(
                   onPressed: () => _validateData(),
                   child: const Text(
-                    'Edit',
+                    'Save',
                   ),
                   style: TextButton.styleFrom(
-                    fixedSize: const Size.fromWidth(170),
+                      fixedSize: const Size.fromWidth(170),
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, top: 5, bottom: 5),
                       primary: Colors.white,
                       backgroundColor:
-                      color.AppColor.secondPageContainerGradient1stColor,
+                          color.AppColor.secondPageContainerGradient1stColor,
                       textStyle: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold)),
                 ),
@@ -191,8 +191,7 @@ class _EditExerciseState extends State<EditExercise> {
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, top: 5, bottom: 5),
                       primary: Colors.white,
-                      backgroundColor:
-                      Colors.pink,
+                      backgroundColor: Colors.pink,
                       textStyle: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold)),
                 ),
@@ -227,7 +226,7 @@ class _EditExerciseState extends State<EditExercise> {
     }
   }
 
-  _onDelete(){
+  _onDelete() {
     _exerciseController.delete(exercise);
     _exerciseController.getExerciseByCategory(exercise.category);
     Get.back();
@@ -286,13 +285,12 @@ class _EditExerciseState extends State<EditExercise> {
     }
     await _exerciseController.editExercise(
         exercise: Exercise(
-            id: _exerciseID,
-            title: _titleController.text,
-            description: _descriptionController.text,
-            time: int.parse(_timeController.text),
-            repeat: int.parse(_repeatController.text),
-            category: _selectedCategoryId,
-            img: imageUri,
-            video: "https://www.youtube.com/watch?v=GQyWIur03aw"));
+      id: _exerciseID,
+      title: _titleController.text,
+      description: _descriptionController.text,
+      time: int.parse(_timeController.text),
+      repeat: int.parse(_repeatController.text),
+      category: _selectedCategoryId,
+    ));
   }
 }
