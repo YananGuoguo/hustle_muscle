@@ -21,6 +21,7 @@ class _EditExerciseState extends State<EditExercise> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _repeatController = TextEditingController();
+  final TextEditingController _imgController = TextEditingController();
   Exercise exercise = Get.arguments;
   String imageUri = "";
   int _selectedCategoryId = 1;
@@ -87,6 +88,7 @@ class _EditExerciseState extends State<EditExercise> {
     _titleController.text = exercise.title!;
     _timeController.text = exercise.time.toString();
     _repeatController.text = exercise.repeat.toString();
+    _imgController.text = exercise.img.toString();
   }
 
   @override
@@ -237,49 +239,41 @@ class _EditExerciseState extends State<EditExercise> {
       case "abdominaux":
         {
           _selectedCategoryId = 1;
-          imageUri = "assets/images/abdominaux.jpg";
         }
         break;
       case "biceps":
         {
           _selectedCategoryId = 2;
-          imageUri = "assets/images/biceps.jpg";
         }
         break;
       case "cuisses":
         {
           _selectedCategoryId = 3;
-          imageUri = "assets/images/cuisses.jpg";
         }
         break;
       case "dos":
         {
           _selectedCategoryId = 4;
-          imageUri = "assets/images/dos.jpg";
         }
         break;
       case "epaules":
         {
           _selectedCategoryId = 5;
-          imageUri = "assets/images/epaules.jpg";
         }
         break;
       case "mollets":
         {
           _selectedCategoryId = 6;
-          imageUri = "assets/images/mollets.jpg";
         }
         break;
       case "parties":
         {
           _selectedCategoryId = 7;
-          imageUri = "assets/images/parties.jpg";
         }
         break;
       case "triceps":
         {
           _selectedCategoryId = 8;
-          imageUri = "assets/images/triceps.jpg";
         }
         break;
     }
@@ -291,6 +285,8 @@ class _EditExerciseState extends State<EditExercise> {
       time: int.parse(_timeController.text),
       repeat: int.parse(_repeatController.text),
       category: _selectedCategoryId,
+      img: _imgController.text,
+      video: "https://www.youtube.com/watch?v=2_3aOp6j9m8",
     ));
   }
 }

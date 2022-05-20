@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:hustle_muscle/controllers/exercise_controller.dart';
 import '../models/class_exercise.dart';
 import 'colors.dart' as color;
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'input_field.dart';
 
 class OperationsExercise extends StatefulWidget {
