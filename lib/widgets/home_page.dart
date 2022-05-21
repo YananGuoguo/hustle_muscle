@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
                     Expanded(child: Container()),
                     InkWell(
                         onTap: () {
-                          debugPrint("details pressed");
                           _exerciseController.getExercises();
                           Get.to(() => const VideoInfo(), arguments: [
                             _exerciseController.exerciseList,

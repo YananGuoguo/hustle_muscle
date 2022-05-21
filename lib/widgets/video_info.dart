@@ -243,9 +243,6 @@ class _VideoInfoState extends State<VideoInfo> {
                                         fontWeight: FontWeight.bold,
                                         color: color.AppColor.circuitsColor)),
                                 Expanded(child: Container()),
-
-                                //TODO: Ontap refresh
-
                                 InkWell(
                                   onTap: (){
                                       categoryId == -1
@@ -294,7 +291,6 @@ class _VideoInfoState extends State<VideoInfo> {
                 children: [
                   Row(
                     children: [
-                      //TODO: Get.to video_detail Page
                       GestureDetector(
                         onTap: () {
                           Get.to(()=>const VideoDetail(), arguments: [exerciseShow[index].video.toString(),
@@ -370,9 +366,10 @@ class _VideoInfoState extends State<VideoInfo> {
                                 ? _exerciseController.getExercises()
                                 : _exerciseController
                                 .getExerciseByCategory(categoryId);
-                            _length--;
+                            // _length--;
                             _length = _exerciseController.exerciseList.length;
                           });
+                          _length = _exerciseController.exerciseList.length;
                         },
                         child: const Icon(Icons.delete,
                             size: 35, color: Colors.blueAccent),
